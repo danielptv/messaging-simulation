@@ -15,3 +15,7 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false  # allow serialization of empty payloads
+
+logging:
+  level:
+    root: info
