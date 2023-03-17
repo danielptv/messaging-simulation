@@ -1,0 +1,17 @@
+spring:
+  application.name: software-consumer
+  kafka:
+    bootstrap-servers: localhost:9092  # the Kafka broker URL
+    consumer:
+      group-id: orders-group  # the consumer group ID
+      auto-offset-reset: earliest  # the offset to start consuming messages
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  jackson:
+    serialization:
+      fail-on-empty-beans: false  # allow serialization of empty payloads
