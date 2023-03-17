@@ -1,4 +1,7 @@
 import net.ltgt.gradle.errorprone.errorprone
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -34,6 +37,11 @@ configurations {
 }
 
 dependencies {
+    implementation(platform(libs.springBom))
+    implementation(platform(libs.springBootBom))
+    implementation(platform(libs.assertjBom))
+    implementation(platform(libs.junitBom))
+
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -90,7 +98,7 @@ tasks.compileTestJava {
     options.errorprone.errorproneArgs.add("-Xep:VariableNameSameAsType:OFF")
 }
 
-tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+tasks.named<BootBuildImage>("bootBuildImage") {
     val path = "danielpurtov"
     imageName.set("$path/${project.name}")
     val tag = System.getProperty("tag") ?: project.version.toString()
@@ -107,7 +115,7 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("boot
     )
 }
 
-tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+tasks.named<BootRun>("bootRun") {
     jvmArgs("--enable-preview")
     val port = System.getProperty("port")
     if (port != null) {
