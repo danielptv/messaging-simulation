@@ -16,7 +16,7 @@ public class SoftwareOrderConsumer {
     @KafkaListener(topics = "orders")
     public void consume(OrderDTO order) {
         if (order.producerId().equals("software")) {
-            log.info("Message received: messageId={}, producerId={}, message={}, confirmation={}",
+            log.info("MESSAGE RECEIVED: messageId={}, producerId={}, message={}, confirmation={}",
                     order.id(),
                     order.producerId(),
                     order.message(),

@@ -12,6 +12,7 @@ public class OrderConfirmationProducer {
     final KafkaTemplate<String, ConfirmationModel> template;
 
     public void send(ConfirmationModel message, String topic) {
+        log.info("SENDING CONFIRMATION: topic={}, message={}", topic, message);
         template.send(topic, message);
     }
 }
