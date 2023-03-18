@@ -1,0 +1,42 @@
+version: '3'
+services:
+  zookeeper:
+    image: 'confluentinc/cp-zookeeper:latest'
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOOKEEPER_CLIENT_PORT: 2181
+    container_name: zookeeper
+  kafka:
+    image: 'confluentinc/cp-kafka:latest'
+    ports:
+      - '9094:9094'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9094
+      KAFKA_CREATE_TOPICS: "orders:1:1,order-confirmations:1:1"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    container_name: kafka
+  software-consumer:
+    image: messaging-sim/consumer:latest
+    ports:
+      - "8080:8080"
+    environment:
+      CONSUMER_TYPE: software
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9094
+    depends_on:
+      - kafka
+    container_name: software-consumer
+  hardware-consumer:
+    image: messaging-sim/consumer:latest
+    ports:
+      - "8081:8081"
+    environment:
+      CONSUMER_TYPE: hardware
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9094
+    depends_on:
+      - kafka
+    container_name: hardware-consumer
