@@ -1,7 +1,5 @@
-import net.ltgt.gradle.errorprone.errorprone
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.springframework.boot.gradle.tasks.run.BootRun
-
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -10,7 +8,6 @@ plugins {
     checkstyle
 
     alias(libs.plugins.springBoot)
-    alias(libs.plugins.errorpronePlugin)
     alias(libs.plugins.spotbugs)
     alias(libs.plugins.asciidoctor)
 }
@@ -66,7 +63,6 @@ dependencies {
     }
     testImplementation(libs.junitPlatformSuiteApi)
     testRuntimeOnly(libs.junitPlatformSuiteEngine)
-    errorprone(libs.errorprone)
 
     constraints {
         implementation(libs.annotations)
@@ -84,9 +80,6 @@ tasks.compileJava {
         add("--add-opens")
         add("--add-exports")
     }
-    with(options.errorprone.errorproneArgs) {
-        add("-Xep:MissingSummary:OFF")
-    }
 }
 
 tasks.compileTestJava {
@@ -95,7 +88,6 @@ tasks.compileTestJava {
         add("-Xlint:unchecked")
         add("--enable-preview")
     }
-    options.errorprone.errorproneArgs.add("-Xep:VariableNameSameAsType:OFF")
 }
 
 tasks.named<BootBuildImage>("bootBuildImage") {
@@ -182,7 +174,6 @@ tasks.spotbugsMain {
         required.set(true)
         outputLocation.set(file("$buildDir/reports/spotbugs.html"))
     }
-    excludeFilter.set(file("extras/spotbugs-exclude.xml"))
 }
 
 tasks.javadoc {
