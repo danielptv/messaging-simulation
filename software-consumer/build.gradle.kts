@@ -48,6 +48,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-json")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation(libs.tomcatCoyote)
+    implementation(libs.jfiglet)
     implementation(libs.springKafka)
     implementation(libs.kafkaClients)
 

@@ -2,6 +2,7 @@
 javaVersion = "19"
 annotations = "24.0.1"
 springBoot = "3.0.4"
+jfiglet = "0.0.9"
 spotbugs = "4.7.3"
 
 # Overwrite specific versions
@@ -41,6 +42,7 @@ tomcatCoyote = { module = "org.apache.tomcat:tomcat-coyote", version.ref = "tomc
 
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 spotbugsAnnotations = { module = "com.github.spotbugs:spotbugs-annotations", version.ref = "spotbugs" }
+jfiglet = { module = "com.github.lalyos:jfiglet", version.ref = "jfiglet" }
 junitPlatformSuiteApi = { module = "org.junit.platform:junit-platform-suite-api", version.ref = "junitPlatformSuite" }
 junitPlatformSuiteEngine = { module = "org.junit.platform:junit-platform-suite-engine", version.ref = "junitPlatformSuite" }
 
