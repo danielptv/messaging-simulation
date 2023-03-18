@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderConfirmationProducer {
-    final KafkaTemplate<String, ConfirmationModel> template;
+    final KafkaTemplate<String, String> template;
 
     public void send(ConfirmationModel message, String topic) {
-        log.info("SENDING CONFIRMATION: topic={}, message={}", topic, message);
-        template.send(topic, message);
+        final var jsonMessage = message.toJSON();
+        log.info("SENDING CONFIRMATION: topic={}, message={}", topic, jsonMessage);
+        template.send(topic, jsonMessage);
     }
 }
