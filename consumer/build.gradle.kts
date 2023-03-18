@@ -14,7 +14,7 @@ plugins {
 
 defaultTasks = mutableListOf("compileTestJava")
 group = "com.danielptv"
-version = "1.0"
+version = "1.0.0"
 
 java {
     toolchain {
@@ -92,7 +92,7 @@ tasks.compileTestJava {
 }
 
 tasks.named<BootBuildImage>("bootBuildImage") {
-    val path = "danielpurtov"
+    val path = "messaging-sim"
     imageName.set("$path/${project.name}")
     val tag = System.getProperty("tag") ?: project.version.toString()
     tags.set(mutableListOf("$path/${project.name}:$tag"))
@@ -100,7 +100,7 @@ tasks.named<BootBuildImage>("bootBuildImage") {
     @Suppress("StringLiteralDuplication")
     environment.set(
         mapOf(
-            "BP_JVM_VERSION" to "19.0.1",
+            "BP_JVM_VERSION" to "19.0.2",
             "BPL_JVM_THREAD_COUNT" to "20",
             "BPE_DELIM_JAVA_TOOL_OPTIONS" to " ",
             "BPE_APPEND_JAVA_TOOL_OPTIONS" to "--enable-preview",
@@ -115,9 +115,12 @@ tasks.named<BootRun>("bootRun") {
         systemProperty("server.port", port)
     }
 
-    val type = System.getProperty("type")
-    if (type != null) {
-        systemProperty("customer.type", type)
+    if (System.getenv("CONSUMER_TYPE") != null) {
+        systemProperties["CONSUMER_TYPE"] = System.getenv("CONSUMER_TYPE")
+    } else if (System.getProperty("type") != null) {
+        systemProperties["CONSUMER_TYPE"] = System.getProperty("type")
+    } else {
+        systemProperties["CONSUMER_TYPE"] = "software"
     }
 
     if (System.getProperty("tls") == "false") {

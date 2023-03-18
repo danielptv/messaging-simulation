@@ -13,12 +13,12 @@ import java.util.UUID;
 @Slf4j
 public class OrderConsumer {
     final OrderConfirmationProducer confirmationProducer;
-    @Value("${customer.type}")
-    String customerType;
+    @Value("${consumer.type}")
+    String consumerType;
 
     @KafkaListener(topics = "orders")
     public void consume(OrderDTO order) {
-        if (order.producerId().equals(customerType)) {
+        if (order.producerId().equals(consumerType)) {
             log.info("MESSAGE RECEIVED: messageId={}, producerId={}, message={}, confirmation={}",
                     order.id(),
                     order.producerId(),

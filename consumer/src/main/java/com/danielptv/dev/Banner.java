@@ -30,7 +30,7 @@ public final class Banner {
      */
     public static final String TEXT = """
         %s
-        Version              1.0
+        Version              1.0.0
         Spring Boot          %s
         Spring               %s
         Tomcat               %s
