@@ -115,25 +115,22 @@ tasks.named<BootRun>("bootRun") {
         systemProperty("server.port", port)
     }
 
+    val type = System.getProperty("type")
+    if (type != null) {
+        systemProperty("customer.type", type)
+    }
+
     if (System.getProperty("tls") == "false") {
         @Suppress("StringLiteralDuplication")
         systemProperty("server.ssl.enabled", "false")
         @Suppress("StringLiteralDuplication")
         systemProperty("server.http2.enabled", "false")
     }
-
-    systemProperty("spring.profiles.default", "dev")
-    systemProperty("spring.profiles.active", "dev")
     systemProperty("spring.config.location", "classpath:/application.yml")
-    systemProperty("spring.datasource.password", "p")
     systemProperty("spring.output.ansi.enabled", "ALWAYS")
     systemProperty("server.tomcat.basedir", "./build/tomcat")
     systemProperty("LOG_PATH", "./build/log")
     systemProperty("APPLICATION_LOGLEVEL", "TRACE")
-    // Logging der Header-Daten
-    systemProperty("REQUEST_RESPONSE_LOGLEVEL", "TRACE")
-    systemProperty("HIBERNATE_LOGLEVEL", "DEBUG")
-    systemProperty("FLYWAY_LOGLEVEL", "DEBUG")
 }
 
 tasks.test {

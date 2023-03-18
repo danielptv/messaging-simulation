@@ -6,4 +6,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "software-consumer"
+rootProject.name = "consumer"

@@ -64,7 +64,7 @@ public final class Banner {
 
     private static String getFiglet() {
         try {
-            return FigletFont.convertOneLine("software-consumer");
+            return FigletFont.convertOneLine("consumer");
         } catch (final IOException ex) {
             throw new IllegalArgumentException(ex);
         }
