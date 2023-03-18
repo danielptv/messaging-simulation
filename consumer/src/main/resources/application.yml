@@ -1,5 +1,7 @@
 spring:
   application.name: ${consumer.type}-consumer
+  main:
+    banner-mode: off
   kafka:
     bootstrap-servers: localhost:9092
     consumer:

@@ -25,46 +25,47 @@ public final class Banner {
     private static final Runtime RUNTIME = Runtime.getRuntime();
     private static final String USERNAME = System.getProperty("user.name");
 
-    /**
-     * Banner für den Server-Start.
-     */
-    public static final String TEXT = """
-        %s
-        Version              1.0.0
-        Spring Boot          %s
-        Spring               %s
-        Tomcat               %s
-        Java                 %s
-        OS                   %s
-        Hostname             %s
-        IP                   %s
-        Heap: Size           %d MiB
-        Heap: Free           %d MiB
-        Username             %s
-        JVM Locale           %s
-        """
-            .formatted(
-                    getFiglet(),
-                    SpringBootVersion.getVersion(),
-                    SpringVersion.getVersion(),
-                    ServerInfo.getServerInfo(),
-                    JAVA,
-                    OS_VERSION,
-                    LOCALHOST.getHostName(),
-                    LOCALHOST.getHostAddress(),
-                    RUNTIME.totalMemory() / MEGABYTE,
-                    RUNTIME.freeMemory() / MEGABYTE,
-                    USERNAME,
-                    Locale.getDefault()
-            );
+    public static String getBanner(String type, String port) {
+        return """
+                %s
+                Version              1.0.0
+                Spring Boot          %s
+                Spring               %s
+                Tomcat               %s
+                Java                 %s
+                OS                   %s
+                Hostname             %s
+                IP                   %s
+                Port                 %s
+                Heap: Size           %d MiB
+                Heap: Free           %d MiB
+                Username             %s
+                JVM Locale           %s
+                """
+                .formatted(
+                        getFiglet(type),
+                        SpringBootVersion.getVersion(),
+                        SpringVersion.getVersion(),
+                        ServerInfo.getServerInfo(),
+                        JAVA,
+                        OS_VERSION,
+                        LOCALHOST.getHostName(),
+                        LOCALHOST.getHostAddress(),
+                        port,
+                        RUNTIME.totalMemory() / MEGABYTE,
+                        RUNTIME.freeMemory() / MEGABYTE,
+                        USERNAME,
+                        Locale.getDefault()
+                );
+    }
 
     @SuppressWarnings("ImplicitCallToSuper")
     private Banner() {
     }
 
-    private static String getFiglet() {
+    private static String getFiglet(String type) {
         try {
-            return FigletFont.convertOneLine("consumer");
+            return FigletFont.convertOneLine(type + "-consumer");
         } catch (final IOException ex) {
             throw new IllegalArgumentException(ex);
         }
