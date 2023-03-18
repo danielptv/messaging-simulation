@@ -1,14 +1,18 @@
 spring:
   application.name: software-consumer
   kafka:
-    bootstrap-servers: localhost:9092  # the Kafka broker URL
+    bootstrap-servers: localhost:9092
     consumer:
-      group-id: orders-group  # the consumer group ID
-      auto-offset-reset: earliest  # the offset to start consuming messages
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: orders-group
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.value.default.type: com.danielptv.kafka.OrderDTO
         spring.json.trusted.packages: '*'
+        group.instance.id: software-consumer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
