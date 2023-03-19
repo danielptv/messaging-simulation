@@ -1,4 +1,8 @@
 spring:
+  profiles:
+    active: dev
+---
+spring:
   application.name: ${CONSUMER_TYPE}-consumer
   main:
     banner-mode: off
@@ -21,6 +25,13 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+  config:
+    activate:
+      on-profile: dev
 
 consumer:
   type: ${CONSUMER_TYPE}
+
+logging.level.org.apache.kafka.clients:
+        producer.ProducerConfig: error
+        consumer.ConsumerConfig: error
