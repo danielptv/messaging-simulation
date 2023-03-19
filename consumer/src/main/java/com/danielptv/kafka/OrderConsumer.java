@@ -16,14 +16,18 @@ public class OrderConsumer {
     @Value("${consumer.type}")
     String consumerType;
 
+    OrderDTO payload;
+
     @KafkaListener(topics = "orders")
     public void consume(OrderDTO order) {
+        payload = null;
         if (order.producerId().equals(consumerType)) {
             log.info("MESSAGE RECEIVED: messageId={}, producerId={}, message={}, confirmation={}",
                     order.id(),
                     order.producerId(),
                     order.message(),
                     order.confirm());
+            payload = order;
             if (order.confirm()) {
                 final var message = new ConfirmationModel(
                         UUID.randomUUID(),

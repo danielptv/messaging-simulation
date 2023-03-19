@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.springBoot)
     alias(libs.plugins.spotbugs)
     alias(libs.plugins.asciidoctor)
+    alias(libs.plugins.dependencyAnalysis)
 }
 
 defaultTasks = mutableListOf("compileTestJava")
@@ -47,10 +48,9 @@ dependencies {
     }
     implementation("org.springframework.boot:spring-boot-starter-json")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation(libs.tomcatCoyote)
     implementation(libs.jfiglet)
     implementation(libs.springKafka)
-    implementation(libs.kafkaClients)
+    runtimeOnly(libs.kafkaClients)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
@@ -62,7 +62,7 @@ dependencies {
         exclude(group = "org.skyscreamer", module = "jsonassert")
         exclude(group = "org.xmlunit", module = "xmlunit-core")
     }
-    testImplementation(libs.junitPlatformSuiteApi)
+    testImplementation(libs.embeddedKafka)
     testRuntimeOnly(libs.junitPlatformSuiteEngine)
 
     constraints {
@@ -115,9 +115,7 @@ tasks.named<BootRun>("bootRun") {
         systemProperty("server.port", port)
     }
 
-    if (System.getenv("CONSUMER_TYPE") != null) {
-        systemProperties["CONSUMER_TYPE"] = System.getenv("CONSUMER_TYPE")
-    } else if (System.getProperty("type") != null) {
+    if (System.getProperty("type") != null) {
         systemProperties["CONSUMER_TYPE"] = System.getProperty("type")
     } else {
         systemProperties["CONSUMER_TYPE"] = "software"
@@ -141,19 +139,14 @@ tasks.test {
         includeTags = setOf("integration", "unit")
     }
 
-    systemProperty("javax.net.ssl.trustStore", "./src/main/resources/truststore.p12")
-    systemProperty("javax.net.ssl.trustStorePassword", "zimmermann")
+    systemProperty("server.port", "8080")
     systemProperty("junit.platform.output.capture.stdout", true)
     systemProperty("junit.platform.output.capture.stderr", true)
     systemProperty("spring.config.location", "classpath:/application.yml")
-    systemProperty("spring.datasource.password", "p")
     systemProperty("server.tomcat.basedir", "./build/tomcat")
 
     systemProperty("LOG_PATH", "./build/log")
     systemProperty("APPLICATION_LOGLEVEL", "TRACE")
-    systemProperty("HIBERNATE_LOGLEVEL", "DEBUG")
-    systemProperty("FLYWAY_LOGLEVEL", "DEBUG")
-
     jvmArgs("--enable-preview")
 }
 
