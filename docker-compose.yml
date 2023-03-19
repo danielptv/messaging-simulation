@@ -1,42 +1,73 @@
-version: '3'
+# Usage:
+# docker compose up
+# docker compose up zookeeper kafka consumer-1 consumer-2
+#
+# docker compose down
+# docker compose stop <service-name>
+---
+version: '3.9'
 services:
+
+  # ------------------------------------------------------------------------------------
+  # Z o o k e e p e r
+  # ------------------------------------------------------------------------------------
   zookeeper:
-    image: 'confluentinc/cp-zookeeper:latest'
+    image: confluentinc/cp-zookeeper:latest
     environment:
       ALLOW_ANONYMOUS_LOGIN: yes
       ZOOKEEPER_CLIENT_PORT: 2181
     container_name: zookeeper
+
+  # ------------------------------------------------------------------------------------
+  # K a f k a
+  # ------------------------------------------------------------------------------------
   kafka:
-    image: 'confluentinc/cp-kafka:latest'
+    image: confluentinc/cp-kafka:latest
+    healthcheck:
+      test: nc -z localhost ${KAFKA_PORT_INTERNAL} || exit -1
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 15s
     ports:
-      - '9094:9094'
+      - "${KAFKA_PORT_INTERNAL}:${KAFKA_PORT_INTERNAL}"
+      - "${KAFKA_PORT_EXTERNAL}:${KAFKA_PORT_EXTERNAL}"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       ALLOW_PLAINTEXT_LISTENER: yes
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9094
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:${KAFKA_PORT_INTERNAL},EXTERNAL://0.0.0.0:${KAFKA_PORT_EXTERNAL}
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:${KAFKA_PORT_INTERNAL},EXTERNAL://localhost:${KAFKA_PORT_EXTERNAL}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CREATE_TOPICS: "orders:1:1,order-confirmations:1:1"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
     container_name: kafka
-  software-consumer:
+
+  # ------------------------------------------------------------------------------------
+  # C o n s u m e r  1
+  # ------------------------------------------------------------------------------------
+  consumer-1:
     image: messaging-sim/consumer:latest
-    ports:
-      - "8080:8080"
     environment:
-      CONSUMER_TYPE: software
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9094
+      CONSUMER_TYPE: ${CONSUMER_TYPE_1}
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
     depends_on:
-      - kafka
-    container_name: software-consumer
-  hardware-consumer:
+      kafka:
+        condition: service_healthy
+    container_name: ${CONSUMER_TYPE_1}-consumer
+
+  # ------------------------------------------------------------------------------------
+  # C o n s u m e r  2
+  # ------------------------------------------------------------------------------------
+  consumer-2:
     image: messaging-sim/consumer:latest
-    ports:
-      - "8081:8081"
     environment:
-      CONSUMER_TYPE: hardware
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9094
+      CONSUMER_TYPE: ${CONSUMER_TYPE_2}
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
     depends_on:
-      - kafka
-    container_name: hardware-consumer
+      kafka:
+        condition: service_healthy
+    container_name: ${CONSUMER_TYPE_2}-consumer
