@@ -25,7 +25,7 @@ public final class Banner {
     private static final Runtime RUNTIME = Runtime.getRuntime();
     private static final String USERNAME = System.getProperty("user.name");
 
-    public static String getBanner(String type, String port) {
+    public static String getBanner(String type) {
         return """
                 %s
                 Version              1.0.0
@@ -36,7 +36,6 @@ public final class Banner {
                 OS                   %s
                 Hostname             %s
                 IP                   %s
-                Port                 %s
                 Heap: Size           %d MiB
                 Heap: Free           %d MiB
                 Username             %s
@@ -51,7 +50,6 @@ public final class Banner {
                         OS_VERSION,
                         LOCALHOST.getHostName(),
                         LOCALHOST.getHostAddress(),
-                        port,
                         RUNTIME.totalMemory() / MEGABYTE,
                         RUNTIME.freeMemory() / MEGABYTE,
                         USERNAME,

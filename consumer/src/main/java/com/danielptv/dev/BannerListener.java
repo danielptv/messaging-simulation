@@ -9,11 +9,8 @@ import org.springframework.stereotype.Component;
 public class BannerListener implements ApplicationListener<ContextRefreshedEvent> {
     @Value("${consumer.type}")
     String consumerType;
-    @Value("${server.port}")
-    String port;
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println(Banner.getBanner(consumerType, port));
+        System.out.println(Banner.getBanner(consumerType));
     }
 }
