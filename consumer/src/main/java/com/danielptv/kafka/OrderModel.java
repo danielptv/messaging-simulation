@@ -3,10 +3,10 @@ package com.danielptv.kafka;
 
 import java.util.UUID;
 
-public record OrderDTO(
+public record OrderModel(
         UUID id,
-        String producerId,
+        String orderType,
         String message,
-        boolean confirm
+        String producerEndpoint
 ) {
 }

@@ -1,39 +1,34 @@
 package com.danielptv.kafka;
 
+import com.danielptv.rest.ConfirmationController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OrderConsumer {
-    final OrderConfirmationProducer confirmationProducer;
+    final ConfirmationController confirmationController;
     @Value("${consumer.type}")
     String consumerType;
-
-    OrderDTO payload;
+    OrderModel payload;
 
     @KafkaListener(topics = "orders")
-    public void consume(OrderDTO order) {
+    public void consume(OrderModel order) {
         payload = null;
-        if (order.producerId().equals(consumerType)) {
-            log.info("MESSAGE RECEIVED: messageId={}, producerId={}, message={}, confirmation={}",
+        if (order.orderType().equals(consumerType)) {
+            log.info("MESSAGE RECEIVED: messageId={}, orderType={}, message={}, producerEndpoint={}",
                     order.id(),
-                    order.producerId(),
+                    order.orderType(),
                     order.message(),
-                    order.confirm());
+                    order.producerEndpoint());
             payload = order;
-            if (order.confirm()) {
-                final var message = new ConfirmationModel(
-                        UUID.randomUUID(),
-                        order.id(),
-                        order.producerId());
-                confirmationProducer.send(message, "order-confirmations");
+            if (order.producerEndpoint() != null) {
+                confirmationController.send(order);
             }
         }
     }

@@ -3,13 +3,13 @@ spring:
     active: dev
 ---
 spring:
-  application.name: ${CONSUMER_TYPE}-consumer
+  application.name: ${CONSUMER_TYPE:software}-consumer
   main:
     banner-mode: off
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: ${CONSUMER_TYPE}-orders
+      group-id: ${CONSUMER_TYPE:software}-orders
       auto-offset-reset: earliest
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
@@ -18,7 +18,7 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.value.default.type: com.danielptv.kafka.OrderDTO
         spring.json.trusted.packages: '*'
-        group.instance.id: ${CONSUMER_TYPE}-consumer
+        group.instance.id: ${CONSUMER_TYPE:software}-consumer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -30,7 +30,7 @@ spring:
       on-profile: dev
 
 consumer:
-  type: ${CONSUMER_TYPE}
+  type: ${CONSUMER_TYPE:software}
 
 logging.level.org.apache.kafka.clients:
         producer.ProducerConfig: error

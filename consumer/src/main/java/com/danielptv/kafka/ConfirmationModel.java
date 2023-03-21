@@ -1,10 +1,13 @@
 package com.danielptv.kafka;
 
+import lombok.Builder;
+
 import java.util.UUID;
 
+@Builder
 public record ConfirmationModel(
         UUID id,
         UUID messageId,
-        String producerId
+        String orderType
 ) {
 }
