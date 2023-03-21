@@ -23,7 +23,7 @@ public class CustomErrorHandler implements CommonErrorHandler {
         switch (thrownException.getCause()) {
             case final ResourceAccessException ex -> handleResourceAccessException(ex);
             case final DeserializationException ex -> handleDeserializationException(ex);
-            default -> handleOtherExceptions(thrownException.getCause());
+            default -> handleOtherException(thrownException.getCause());
         }
         return true;
     }
@@ -39,7 +39,7 @@ public class CustomErrorHandler implements CommonErrorHandler {
     }
 
     @ExceptionHandler
-    public void handleOtherExceptions(Throwable ex) {
+    public void handleOtherException(Throwable ex) {
         log.error("Other exception: message={}", ex.getLocalizedMessage());
     }
 }
