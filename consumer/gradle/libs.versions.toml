@@ -16,14 +16,9 @@ tomcat = "11.0.0-M4"
 junitPlatformSuite = "1.9.2"
 embeddedKafka = "3.0.4"
 
-# Documentation
-checkstyle = "10.6.0"
-asciidoctorj = "2.5.7"
-asciidoctorjDiagram = "2.2.3"
-
 # Plugins
+checkstyle = "10.6.0"
 spotbugsPlugin = "5.0.13"
-asciidoctor = "4.0.0-alpha.1"
 dependencyAnalysis = "1.19.0"
 
 # Messaging
@@ -51,5 +46,4 @@ embeddedKafka = { module = "org.springframework.kafka:spring-kafka-test", versio
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
 spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugsPlugin" }
-asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor" }
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }

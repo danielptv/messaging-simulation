@@ -9,7 +9,6 @@ plugins {
 
     alias(libs.plugins.springBoot)
     alias(libs.plugins.spotbugs)
-    alias(libs.plugins.asciidoctor)
     alias(libs.plugins.dependencyAnalysis)
 }
 
@@ -115,10 +114,9 @@ tasks.named<BootRun>("bootRun") {
         systemProperty("server.port", port)
     }
 
-    if (System.getProperty("type") != null) {
-        systemProperties["CONSUMER_TYPE"] = System.getProperty("type")
-    } else {
-        systemProperties["CONSUMER_TYPE"] = "software"
+    val type = System.getProperty("type")
+    if (type != null) {
+        systemProperties["CONSUMER_TYPE"] = type
     }
 
     if (System.getProperty("tls") == "false") {
@@ -139,7 +137,6 @@ tasks.test {
         includeTags = setOf("integration", "unit")
     }
 
-    systemProperty("server.port", "8080")
     systemProperty("junit.platform.output.capture.stdout", true)
     systemProperty("junit.platform.output.capture.stderr", true)
     systemProperty("spring.config.location", "classpath:/application.yml")
@@ -160,57 +157,12 @@ checkstyle {
 }
 
 spotbugs {
-    // https://github.com/spotbugs/spotbugs/releases
     toolVersion.set(libs.versions.spotbugs.get())
 }
 tasks.spotbugsMain {
     reports.create("html") {
         required.set(true)
         outputLocation.set(file("$buildDir/reports/spotbugs.html"))
-    }
-}
-
-tasks.javadoc {
-    options {
-        showFromPackage()
-        this as CoreJavadocOptions
-        addStringOption("Xdoclint:none", "-quiet")
-        addBooleanOption("-enable-preview", true)
-        addStringOption("-release", "19")
-
-        this as StandardJavadocDocletOptions
-        author(true)
-    }
-}
-
-tasks.getByName<org.asciidoctor.gradle.jvm.AsciidoctorTask>("asciidoctor") {
-    asciidoctorj {
-        setVersion(libs.versions.asciidoctorj.get())
-        // requires("asciidoctor-diagram")
-
-        modules {
-            diagram.use()
-            diagram.setVersion(libs.versions.asciidoctorjDiagram.get())
-        }
-    }
-
-    val separator = System.getProperty("file.separator")
-    @Suppress("StringLiteralDuplication")
-    setBaseDir(file("extras${separator}doc"))
-    setSourceDir(file("extras${separator}doc"))
-    logDocuments = true
-
-    inProcess = org.asciidoctor.gradle.base.process.ProcessMode.JAVA_EXEC
-    forkOptions {
-        @Suppress("StringLiteralDuplication")
-        jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
-    }
-
-    doLast {
-        @Suppress("MaxLineLength")
-        println(
-            "Das Entwicklerhandbuch ist in $buildDir${separator}docs${separator}asciidoc${separator}entwicklerhandbuch.html", // ktlint-disable max-line-length
-        )
     }
 }
 
