@@ -16,7 +16,7 @@ spring:
       properties:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
-        spring.json.value.default.type: com.danielptv.kafka.OrderDTO
+        spring.json.value.default.type: com.danielptv.kafka.OrderModel
         spring.json.trusted.packages: '*'
         group.instance.id: ${CONSUMER_TYPE:software}-consumer
     producer:
