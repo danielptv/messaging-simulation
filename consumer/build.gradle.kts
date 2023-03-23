@@ -63,6 +63,7 @@ dependencies {
     }
     testImplementation(libs.embeddedKafka)
     testRuntimeOnly(libs.junitPlatformSuiteEngine)
+    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:4.0.1")
 
     constraints {
         implementation(libs.annotations)

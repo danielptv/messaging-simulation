@@ -7,7 +7,7 @@ import java.util.UUID;
 @Builder
 public record ConfirmationModel(
         UUID id,
-        UUID messageId,
+        UUID orderId,
         String orderType
 ) {
 }

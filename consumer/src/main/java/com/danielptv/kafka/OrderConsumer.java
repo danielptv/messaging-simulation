@@ -21,7 +21,7 @@ public class OrderConsumer {
     public void consume(OrderModel order) {
         payload = null;
         if (order.orderType().equals(consumerType)) {
-            log.info("MESSAGE RECEIVED: messageId={}, orderType={}, message={}, producerEndpoint={}",
+            log.info("MESSAGE RECEIVED: orderId={}, orderType={}, message={}, producerEndpoint={}",
                     order.id(),
                     order.orderType(),
                     order.message(),
