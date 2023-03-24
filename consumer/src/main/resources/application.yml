@@ -35,3 +35,6 @@ consumer:
 logging.level.org.apache.kafka.clients:
         producer.ProducerConfig: error
         consumer.ConsumerConfig: error
+
+wiremock:
+  reset-mappings-after-each-test: true
