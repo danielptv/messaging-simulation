@@ -31,7 +31,6 @@ public class Controller {
     @PostMapping(path = "/order", consumes = APPLICATION_JSON_VALUE)
     @SuppressWarnings("unused")
     ResponseEntity<Void> order(@RequestBody final OrderModel order) {
-        log.info("order: {}", order);
         service.order(order);
         return ResponseEntity.noContent().build();
     }
@@ -39,7 +38,6 @@ public class Controller {
     @PostMapping(path = "/confirm", consumes = APPLICATION_JSON_VALUE)
     @SuppressWarnings("unused")
     ResponseEntity<Void> confirm(@RequestBody final ConfirmationModel confirmation) {
-        log.info("confirm: {}", confirmation);
         service.confirm(confirmation);
         return ResponseEntity.noContent().build();
     }
