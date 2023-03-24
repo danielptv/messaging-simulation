@@ -14,4 +14,16 @@ Content-Type: application/json
 POST {{restUrl}}/confirm
 Content-Type: application/json
 
-< data/confirmation-invalid-json.json
+< data/invalid-json.json
+
+### Send a valid order
+POST {{restUrl}}/order
+Content-Type: application/json
+
+< data/order.json
+
+### Send a order with invalid json
+POST {{restUrl}}/order
+Content-Type: application/json
+
+< data/invalid-json.json

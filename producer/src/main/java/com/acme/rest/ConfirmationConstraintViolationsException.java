@@ -7,11 +7,11 @@ import lombok.Getter;
 import java.util.Collection;
 
 @Getter
-public class ConstraintViolationsException extends RuntimeException {
+public class ConfirmationConstraintViolationsException extends RuntimeException {
 
     private final Collection<ConstraintViolation<ConfirmationModel>> violations;
 
-    ConstraintViolationsException(
+    ConfirmationConstraintViolationsException(
         @SuppressWarnings("ParameterHidesMemberVariable")
         final Collection<ConstraintViolation<ConfirmationModel>> violations
     ) {
