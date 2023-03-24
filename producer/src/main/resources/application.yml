@@ -3,7 +3,7 @@ spring:
     active: dev
 ---
 spring:
-  application.name: ${PRODUCER_TYPE:software}-producer
+  application.name: producer
   main:
     banner-mode: off
   kafka:
@@ -17,9 +17,6 @@ spring:
   config:
     activate:
       on-profile: dev
-
-producer:
-  type: ${PRODUCER_TYPE:software}
 
 logging.level.org.apache.kafka.clients:
         producer.ProducerConfig: error

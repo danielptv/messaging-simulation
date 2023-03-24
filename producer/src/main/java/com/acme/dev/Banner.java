@@ -21,7 +21,7 @@ public final class Banner {
     @SuppressWarnings("ImplicitCallToSuper")
     private Banner() {
     }
-    public static String getBanner(final String type) {
+    public static String getBanner() {
         return """
                 %s
                 Version              1.0.0
@@ -38,7 +38,7 @@ public final class Banner {
                 JVM Locale           %s
                 """
                 .formatted(
-                        getFiglet(type),
+                        getFiglet(),
                         SpringBootVersion.getVersion(),
                         SpringVersion.getVersion(),
                         ServerInfo.getServerInfo(),
@@ -53,9 +53,9 @@ public final class Banner {
                 );
     }
 
-    private static String getFiglet(final String type) {
+    private static String getFiglet() {
         try {
-            return FigletFont.convertOneLine(type + "-producer");
+            return FigletFont.convertOneLine("producer");
         } catch (final IOException ex) {
             throw new IllegalArgumentException(ex);
         }

@@ -115,11 +115,6 @@ tasks.named<BootRun>("bootRun") {
         systemProperty("server.port", port)
     }
 
-    val type = System.getProperty("type")
-    if (type != null) {
-        systemProperties["PRODUCER_TYPE"] = type
-    }
-
     if (System.getProperty("tls") == "false") {
         @Suppress("StringLiteralDuplication")
         systemProperty("server.ssl.enabled", "false")
