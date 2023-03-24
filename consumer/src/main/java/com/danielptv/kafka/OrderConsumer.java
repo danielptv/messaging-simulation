@@ -12,21 +12,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderConsumer {
-    final ConfirmationController confirmationController;
+    private final ConfirmationController confirmationController;
     @Value("${consumer.type}")
-    String consumerType;
-    OrderModel payload;
+    private String consumerType;
 
     @KafkaListener(topics = "orders")
-    public void consume(OrderModel order) {
-        payload = null;
+    public void consume(final OrderModel order) {
         if (order.orderType().equals(consumerType)) {
             log.info("MESSAGE RECEIVED: orderId={}, orderType={}, message={}, producerEndpoint={}",
                     order.id(),
                     order.orderType(),
                     order.message(),
                     order.producerEndpoint());
-            payload = order;
             if (order.producerEndpoint() != null) {
                 confirmationController.send(order);
             }

@@ -10,13 +10,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Locale;
 
-@SuppressWarnings({
-        "AccessOfSystemProperties",
-        "CallToSystemGetenv",
-        "UtilityClassCanBeEnum",
-        "UtilityClass",
-        "ClassUnconnectedToPackage"
-})
 public final class Banner {
     private static final String JAVA = Runtime.version().toString() + " - " + System.getProperty("java.vendor");
     private static final String OS_VERSION = System.getProperty("os.name");
@@ -25,7 +18,10 @@ public final class Banner {
     private static final Runtime RUNTIME = Runtime.getRuntime();
     private static final String USERNAME = System.getProperty("user.name");
 
-    public static String getBanner(String type) {
+    @SuppressWarnings("ImplicitCallToSuper")
+    private Banner() {
+    }
+    public static String getBanner(final String type) {
         return """
                 %s
                 Version              1.0.0
@@ -57,11 +53,7 @@ public final class Banner {
                 );
     }
 
-    @SuppressWarnings("ImplicitCallToSuper")
-    private Banner() {
-    }
-
-    private static String getFiglet(String type) {
+    private static String getFiglet(final String type) {
         try {
             return FigletFont.convertOneLine(type + "-consumer");
         } catch (final IOException ex) {

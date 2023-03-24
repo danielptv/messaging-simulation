@@ -15,10 +15,10 @@ import org.springframework.web.client.ResourceAccessException;
 public class CustomErrorHandler implements CommonErrorHandler {
     @Override
     public boolean handleOne(
-            Exception thrownException,
-            ConsumerRecord<?, ?> record,
-            Consumer<?, ?> consumer,
-            MessageListenerContainer container
+            final Exception thrownException,
+            final ConsumerRecord<?, ?> consumerRecord,
+            final Consumer<?, ?> consumer,
+            final MessageListenerContainer container
     ) {
         switch (thrownException.getCause()) {
             case final ResourceAccessException ex -> handleResourceAccessException(ex);
@@ -29,17 +29,17 @@ public class CustomErrorHandler implements CommonErrorHandler {
     }
 
     @ExceptionHandler
-    public void handleResourceAccessException(ResourceAccessException ex) {
-        log.error("ResourceAccessException: message={}", ex.getLocalizedMessage());
+    public void handleResourceAccessException(final ResourceAccessException ex) {
+        log.error("ResourceAccessException - Server is unavailable: message={}", ex.getLocalizedMessage());
     }
 
     @ExceptionHandler
-    public void handleDeserializationException(DeserializationException ex) {
+    public void handleDeserializationException(final DeserializationException ex) {
         log.error("DeserializationException: message={}", ex.getLocalizedMessage());
     }
 
     @ExceptionHandler
-    public void handleOtherException(Throwable ex) {
+    public void handleOtherException(final Throwable ex) {
         log.error("Other exception: message={}", ex.getLocalizedMessage());
     }
 }

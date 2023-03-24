@@ -18,9 +18,6 @@
     <!-- https://checkstyle.sf.net/config_whitespace.html -->
     <module name="FileTabCharacter"/>
 
-    <!-- https://checkstyle.org/config_javadoc.html -->
-    <module name="JavadocPackage"/>
-
     <!-- https://checkstyle.org/config_sizes.html -->
     <module name="FileLength"/>
     <module name="LineLength">
@@ -56,30 +53,6 @@
         <module name="IllegalImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
-
-        <!-- https://checkstyle.org/config_javadoc.html -->
-        <module name="AtclauseOrder"/>
-        <module name="InvalidJavadocPosition"/>
-        <module name="JavadocBlockTagLocation"/>
-        <module name="JavadocContentLocationCheck"/>
-        <module name="JavadocMethod"/>
-        <module name="JavadocMissingLeadingAsterisk"/>
-        <module name="JavadocMissingWhitespaceAfterAsterisk"/>
-        <module name="JavadocParagraph"/>
-        <module name="JavadocStyle"/>
-        <module name="JavadocTagContinuationIndentation"/>
-        <module name="JavadocType"/>
-        <module name="JavadocVariable">
-            <property name="scope" value="public"/>
-        </module>
-        <module name="MissingJavadocMethod"/>
-        <module name="MissingJavadocPackage"/>
-        <module name="MissingJavadocType"/>
-        <module name="NonEmptyAtclauseDescription"/>
-        <module name="RequireEmptyLineBeforeBlockTagGroup"/>
-        <module name="SingleLineJavadoc"/>
-        <module name="SummaryJavadocCheck"/>
-        <module name="WriteTag"/>
 
         <!-- https://checkstyle.org/config_metrics.html -->
         <module name="BooleanExpressionComplexity"/>

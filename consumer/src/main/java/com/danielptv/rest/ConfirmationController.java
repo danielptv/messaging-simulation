@@ -12,20 +12,21 @@ import java.util.UUID;
 @RestController
 @Slf4j
 public class ConfirmationController {
-    ConfirmationModel confirmation;
-    ResponseEntity<?> response;
-    public void send(OrderModel order) {
-        confirmation = null;
-        response = null;
+    public ResponseEntity<?> send(final OrderModel order) {
         final var restTemplate = new RestTemplate();
-        confirmation = ConfirmationModel
+        final var confirmation = ConfirmationModel
                 .builder()
                 .id(UUID.randomUUID())
                 .orderId(order.id())
                 .orderType(order.orderType())
                 .build();
 
-        response = restTemplate.postForEntity(order.producerEndpoint(), confirmation, ConfirmationModel.class);
+        final var response = restTemplate.postForEntity(
+                order.producerEndpoint(),
+                confirmation,
+                ConfirmationModel.class
+        );
         log.info("SENDING CONFIRMATION: message={}, statusCode={}", confirmation, response.getStatusCode());
+        return response;
     }
 }

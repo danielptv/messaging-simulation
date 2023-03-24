@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class BannerListener implements ApplicationListener<ContextRefreshedEvent> {
     @Value("${consumer.type}")
-    String consumerType;
+    private String consumerType;
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(final ContextRefreshedEvent event) {
         System.out.println(Banner.getBanner(consumerType));
     }
 }
