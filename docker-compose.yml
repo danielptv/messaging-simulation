@@ -47,6 +47,34 @@ services:
     container_name: kafka
 
   # ------------------------------------------------------------------------------------
+  # P r o d u c e r  1
+  # ------------------------------------------------------------------------------------
+  producer-1:
+    image: messaging-sim/producer:latest
+    ports:
+      - "${PRODUCER_PORT_1}:${PRODUCER_PORT_1}"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
+    depends_on:
+      kafka:
+        condition: service_healthy
+    container_name: producer
+
+  # ------------------------------------------------------------------------------------
+  # P r o d u c e r  2
+  # ------------------------------------------------------------------------------------
+  producer-2:
+    image: messaging-sim/producer:latest
+    ports:
+      - "${PRODUCER_PORT_2}:${PRODUCER_PORT_2}"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
+    depends_on:
+      kafka:
+        condition: service_healthy
+    container_name: producer
+
+  # ------------------------------------------------------------------------------------
   # C o n s u m e r  1
   # ------------------------------------------------------------------------------------
   consumer-1:
