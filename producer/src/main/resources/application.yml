@@ -22,7 +22,7 @@ logging.level.org.apache.kafka.clients:
         producer.ProducerConfig: error
 
 server:
-  port: 8080
+  port: ${EXTERNAL_PORT:8080}
 
 wiremock:
   reset-mappings-after-each-test: true

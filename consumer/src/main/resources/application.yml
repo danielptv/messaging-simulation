@@ -16,12 +16,10 @@ spring:
       properties:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.type.mapping: com.acme.kafka.OrderModel:com.danielptv.kafka.OrderModel
         spring.json.value.default.type: com.danielptv.kafka.OrderModel
-        spring.json.trusted.packages: '*'
+        spring.json.trusted.packages: "*"
         group.instance.id: ${CONSUMER_TYPE:software}-consumer
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   jackson:
     serialization:
       fail-on-empty-beans: false
@@ -33,7 +31,6 @@ consumer:
   type: ${CONSUMER_TYPE:software}
 
 logging.level.org.apache.kafka.clients:
-        producer.ProducerConfig: error
         consumer.ConsumerConfig: error
 
 wiremock:

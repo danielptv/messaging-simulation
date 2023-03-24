@@ -112,7 +112,7 @@ tasks.named<BootRun>("bootRun") {
     jvmArgs("--enable-preview")
     val port = System.getProperty("port")
     if (port != null) {
-        systemProperty("server.port", port)
+        systemProperties["EXTERNAL_PORT"] = port
     }
 
     if (System.getProperty("tls") == "false") {

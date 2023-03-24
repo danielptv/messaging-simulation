@@ -30,8 +30,8 @@ services:
       retries: 10
       start_period: 15s
     ports:
-      - "${KAFKA_PORT_INTERNAL}:${KAFKA_PORT_INTERNAL}"
-      - "${KAFKA_PORT_EXTERNAL}:${KAFKA_PORT_EXTERNAL}"
+      - ${KAFKA_PORT_INTERNAL}:${KAFKA_PORT_INTERNAL}
+      - ${KAFKA_PORT_EXTERNAL}:${KAFKA_PORT_EXTERNAL}
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -40,7 +40,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:${KAFKA_PORT_INTERNAL},EXTERNAL://localhost:${KAFKA_PORT_EXTERNAL}
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_CREATE_TOPICS: "orders:1:1"
+      KAFKA_CREATE_TOPICS: orders:1:1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
@@ -52,13 +52,14 @@ services:
   producer-1:
     image: messaging-sim/producer:latest
     ports:
-      - "${PRODUCER_PORT_1}:${PRODUCER_PORT_1}"
+      - ${PRODUCER_PORT_1}:${PRODUCER_PORT_1}
     environment:
+      EXTERNAL_PORT: ${PRODUCER_PORT_1}
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
     depends_on:
       kafka:
         condition: service_healthy
-    container_name: producer
+    container_name: producer-1
 
   # ------------------------------------------------------------------------------------
   # P r o d u c e r  2
@@ -66,13 +67,14 @@ services:
   producer-2:
     image: messaging-sim/producer:latest
     ports:
-      - "${PRODUCER_PORT_2}:${PRODUCER_PORT_2}"
+      - ${PRODUCER_PORT_2}:${PRODUCER_PORT_2}
     environment:
+      EXTERNAL_PORT: ${PRODUCER_PORT_2}
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
     depends_on:
       kafka:
         condition: service_healthy
-    container_name: producer
+    container_name: producer-2
 
   # ------------------------------------------------------------------------------------
   # C o n s u m e r  1

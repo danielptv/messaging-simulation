@@ -11,9 +11,9 @@ import java.net.UnknownHostException;
 import java.util.Locale;
 
 public final class Banner {
+    public static final InetAddress LOCALHOST = getLocalhost();
     private static final String JAVA = Runtime.version().toString() + " - " + System.getProperty("java.vendor");
     private static final String OS_VERSION = System.getProperty("os.name");
-    private static final InetAddress LOCALHOST = getLocalhost();
     private static final long MEGABYTE = 1024L * 1024L;
     private static final Runtime RUNTIME = Runtime.getRuntime();
     private static final String USERNAME = System.getProperty("user.name");

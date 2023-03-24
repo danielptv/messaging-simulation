@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
+import static com.acme.dev.Banner.LOCALHOST;
+
+
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
 @Slf4j
@@ -44,7 +47,6 @@ public class Service {
         }
     }
 
-
     private OrderModel getRandomOrder() {
         final var orderTypes = Arrays.asList("Software", "Hardware");
         final var messages = Arrays.asList(
@@ -58,7 +60,7 @@ public class Service {
                 .id(UUID.randomUUID())
                 .orderType(orderTypes.get(random.nextInt(orderTypes.size())))
                 .message(messages.get(random.nextInt(messages.size())))
-                .producerEndpoint(String.format("http://localhost:%s/rest/confirm", serverPort))
+                .producerEndpoint(String.format("http://%s:%s/rest/confirm", LOCALHOST.getHostAddress(), serverPort))
                 .build();
     }
 }
