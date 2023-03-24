@@ -7,9 +7,28 @@ This project is a simulation for messaging consisting of 3 main parts:
 
 ## Usage
 
+### How To Build
+To create an image, you can use the command `gradle bootbuildimage`. Alternatively, you can start a server by running `gradle bootrun` in the producer or consumer directory. To ensure code quality, you can use `gradle spotbugsmain checkstylemain` to lint the code.
+
+### How To Run
+TODO
 
 ## Implementation and Structure
 The project consists of the two microservices 'consumer' and 'producer' as well as Kafka as message-oriented middleware. The microservices are both implemented as Spring Boot applications. Below you can find explanations of some of their main aspects in terms of structure and implementation.
+
+**Producer** ─ Sends messages to consumers and receives confirmations from them.
+````text
+producer/src
+ └── main
+      ├── java/com.acme
+      │     ├── rest/Controller.java
+      │     ├── rest/Service.java
+      │     └── Application.java
+      └── resources/application.yml
+````
+* **Controller.java:** Implements a simple REST endpoint for receiving confirmations and triggering orders.
+* **Service.java:** Sends order messages using Kafka. The methods are called by the controller.
+* **application.yml:** Configuration for spring-kafka and other important parameters. Parameterization enables this server to be a generic consumer with the consumer type being passed through an environment variable.
 
 **Consumer** ─ Receives messages from producers and sends back confirmations to them.
 ````text
