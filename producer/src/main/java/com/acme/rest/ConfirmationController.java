@@ -26,7 +26,7 @@ import static org.springframework.http.ResponseEntity.unprocessableEntity;
 public class ConfirmationController {
     private final ConfirmationService service;
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/confirm", consumes = APPLICATION_JSON_VALUE)
     @SuppressWarnings({"TrailingComment", "unused"})
     ResponseEntity<Void> confirm(
             @RequestBody final ConfirmationModel confirmation

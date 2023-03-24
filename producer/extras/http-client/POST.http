@@ -1,17 +1,17 @@
 ### Send a valid confirmation
-POST {{restUrl}}
+POST {{restUrl}}/confirm
 Content-Type: application/json
 
 < data/confirmation.json
 
 ### Send a confirmation with invalid data
-POST {{restUrl}}
+POST {{restUrl}}/confirm
 Content-Type: application/json
 
 < data/confirmation-invalid-data.json
 
 ### Send a confirmation with invalid json
-POST {{restUrl}}
+POST {{restUrl}}/confirm
 Content-Type: application/json
 
 < data/confirmation-invalid-json.json
