@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  application.name: ${PRODUCER_TYPE:software}-producer
+  main:
+    banner-mode: off
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  config:
+    activate:
+      on-profile: dev
+
+producer:
+  type: ${PRODUCER_TYPE:software}
+
+logging.level.org.apache.kafka.clients:
+        producer.ProducerConfig: error
+
+wiremock:
+  reset-mappings-after-each-test: true
