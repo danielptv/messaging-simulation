@@ -6,11 +6,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
 @Slf4j
 public class Service {
+    final KafkaTemplate<String, OrderModel> template;
     private final Validator validator;
 
     void order(@Valid final OrderModel order) {
@@ -19,6 +21,7 @@ public class Service {
             log.debug("order: violations={}", violations);
             throw new OrderConstraintViolationsException(violations);
         }
+        template.send("orders", order);
     }
 
     void confirm(@Valid final ConfirmationModel confirmation) {
