@@ -22,6 +22,12 @@ Content-Type: application/json
 
 < data/order.json
 
+### Send a random order
+POST {{restUrl}}/order
+Content-Type: application/json
+
+< data/empty.json
+
 ### Send a order with invalid json
 POST {{restUrl}}/order
 Content-Type: application/json
