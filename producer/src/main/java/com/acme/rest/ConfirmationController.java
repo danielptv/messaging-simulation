@@ -31,7 +31,7 @@ public class ConfirmationController {
     ResponseEntity<Void> confirm(
             @RequestBody final ConfirmationModel confirmation
     ) {
-        log.info("confirmed: {}", confirmation);
+        log.info("confirm: {}", confirmation);
         service.confirm(confirmation);
         return ResponseEntity.ok().build();
     }

@@ -14,10 +14,9 @@ public class ConfirmationService {
     private final Validator validator;
 
     void confirm(@Valid final ConfirmationModel confirmation) {
-        log.info("confirmed: {}", confirmation);
         final var violations = validator.validate(confirmation);
         if (!violations.isEmpty()) {
-            log.debug("create: violations={}", violations);
+            log.debug("confirm: violations={}", violations);
             throw new ConstraintViolationsException(violations);
         }
     }
