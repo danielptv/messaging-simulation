@@ -1,5 +1,6 @@
 package com.danielptv.dev;
 
+import com.danielptv.kafka.OrderConstraintViolationsException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -23,6 +24,7 @@ public class CustomErrorHandler implements CommonErrorHandler {
         switch (thrownException.getCause()) {
             case final ResourceAccessException ex -> handleResourceAccessException(ex);
             case final DeserializationException ex -> handleDeserializationException(ex);
+            case final OrderConstraintViolationsException ex -> handleOrderConstraintViolationsException(ex);
             default -> handleOtherException(thrownException.getCause());
         }
         return true;
@@ -36,6 +38,17 @@ public class CustomErrorHandler implements CommonErrorHandler {
     @ExceptionHandler
     public void handleDeserializationException(final DeserializationException ex) {
         log.error("DeserializationException: message={}", ex.getLocalizedMessage());
+    }
+
+    @ExceptionHandler
+    public void handleOrderConstraintViolationsException(final OrderConstraintViolationsException ex) {
+        final var violations = ex.getViolations()
+                .stream()
+                .map(violation -> violation.getPropertyPath() + ": " +
+                        violation.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName() + " " +
+                        violation.getMessage())
+                .toList();
+        log.error("OrderConstraintViolationsException: violations={}", violations);
     }
 
     @ExceptionHandler

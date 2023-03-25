@@ -25,7 +25,7 @@ public class OrderConsumer {
         final var violations = validator.validate(order);
         if (!violations.isEmpty()) {
             log.debug("consume: {}", violations);
-            throw new OrderConstraintViolationsException();
+            throw new OrderConstraintViolationsException(violations);
         }
         if (order.orderType().equalsIgnoreCase(consumerType)) {
             log.info("ORDER RECEIVED: orderId={}, orderType={}, message={}, producerEndpoint={}",
