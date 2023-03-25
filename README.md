@@ -34,8 +34,6 @@ To run this simulation you will need the following software:
 
 **Note:** Producer and Kafka ports as well as consumer types can be adjusted in the <code>*.env*</code> file.
 
-To ensure code quality, you can use `gradle spotbugsmain checkstylemain` to lint the code.
-
 ### How To Run (use Gradle developer mode)
 
 1. Clone the repo: `git clone https://github.com/danielptv/messaging-simulation.git`
@@ -88,6 +86,8 @@ The project consists of the two microservices 'consumer' and 'producer' as well 
 middleware.
 The microservices are both implemented as Spring Boot applications. Below you can find explanations of some of their
 main aspects in terms of structure and implementation.
+
+To ensure code quality, the code can be linted using `gradle spotbugsmain checkstylemain`.
 
 **Apache Kafka** ─ Distributed messaging system.
 
