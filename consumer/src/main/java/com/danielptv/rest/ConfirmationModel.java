@@ -1,4 +1,4 @@
-package com.danielptv.kafka;
+package com.danielptv.rest;
 
 import lombok.Builder;
 

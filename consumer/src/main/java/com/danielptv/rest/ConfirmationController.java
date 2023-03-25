@@ -1,6 +1,5 @@
 package com.danielptv.rest;
 
-import com.danielptv.kafka.ConfirmationModel;
 import com.danielptv.kafka.OrderModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,8 @@ import java.util.UUID;
 @RestController
 @Slf4j
 public class ConfirmationController {
+    private final RestTemplate restTemplate = new RestTemplate();
     public ResponseEntity<?> send(final OrderModel order) {
-        final var restTemplate = new RestTemplate();
         final var confirmation = ConfirmationModel
                 .builder()
                 .id(UUID.randomUUID())

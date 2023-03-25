@@ -1,5 +1,6 @@
 package com.danielptv.kafka;
 
+import com.danielptv.rest.ConfirmationModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
