@@ -107,8 +107,7 @@ producer/src
 
 * **Controller.java:** Implements a simple REST endpoint for receiving confirmations and triggering orders.
 * **Service.java:** Sends order messages using Kafka. The methods are called by the controller.
-* **application.yml:** Configuration for spring-kafka and other important parameters. Parameterization enables this
-  server to be a generic consumer with the consumer type being passed through an environment variable.
+* **application.yml:** Configuration for spring-kafka and other important parameters.
 
 **Consumer** ─ Receives messages from the queue and sends back confirmations to the respective producers.
 
