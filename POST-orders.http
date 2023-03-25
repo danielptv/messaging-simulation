@@ -1,0 +1,39 @@
+### Producer-1: Order software
+POST {{producer-1}}/order
+Content-Type: application/json
+
+{
+  "id": "{{$uuid}}",
+  "orderType": "software",
+  "message": "Faster, faster! Deadline was yesterday ..."
+}
+
+### Producer-1: Order hardware
+POST {{producer-1}}/order
+Content-Type: application/json
+
+{
+  "id": "{{$uuid}}",
+  "orderType": "hardware",
+  "message": "Mainframes are super-easy to maintain, you better get to it!!"
+}
+
+### Producer-2: Order software
+POST {{producer-2}}/order
+Content-Type: application/json
+
+{
+  "id": "{{$uuid}}",
+  "orderType": "software",
+  "message": "GPT us something :)))"
+}
+
+### Producer-2: Order hardware
+POST {{producer-2}}/order
+Content-Type: application/json
+
+{
+  "id": "{{$uuid}}",
+  "orderType": "hardware",
+  "message": "Get me some Pentium x)"
+}
