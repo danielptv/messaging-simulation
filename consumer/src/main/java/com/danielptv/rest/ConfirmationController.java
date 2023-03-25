@@ -21,12 +21,14 @@ public class ConfirmationController {
                 .orderType(order.orderType())
                 .build();
 
-        final var response = restTemplate.postForEntity(
+        log.info("SENDING CONFIRMATION: confirmationId={}, orderId={}, orderType={}",
+                confirmation.id(),
+                confirmation.orderId(),
+                confirmation.orderType());
+        return restTemplate.postForEntity(
                 order.producerEndpoint(),
                 confirmation,
                 ConfirmationModel.class
         );
-        log.info("SENDING CONFIRMATION: message={}, statusCode={}", confirmation, response.getStatusCode());
-        return response;
     }
 }

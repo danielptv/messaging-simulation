@@ -9,10 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
-
 import static com.acme.dev.Banner.LOCALHOST;
 
 
@@ -22,45 +18,40 @@ import static com.acme.dev.Banner.LOCALHOST;
 public class Service {
     private final KafkaTemplate<String, OrderModel> template;
     private final Validator validator;
-    private final Random random = new Random();
-
     @Value("${server.port}")
     private int serverPort;
 
     void order(@Valid final OrderModel order) {
-        final OrderModel actualOrder = order.id() == null ? getRandomOrder() : order;
-        log.info("order: {}", actualOrder);
-        final var violations = validator.validate(actualOrder);
+        final var violations = validator.validate(order);
         if (!violations.isEmpty()) {
             log.debug("order: violations={}", violations);
             throw new OrderConstraintViolationsException(violations);
         }
+        final var actualOrder = OrderModel.builder()
+                .id(order.id())
+                .orderType(order.orderType())
+                .message(order.message())
+                .producerEndpoint(order.producerEndpoint() == null
+                        ? String.format("http://%s:%s/rest/confirm", LOCALHOST.getHostAddress(), serverPort)
+                        : order.producerEndpoint())
+                .build();
+        log.info("SENDING ORDER: orderId={}, orderType={}, message={}, producerEndpoint={}",
+                actualOrder.id(),
+                actualOrder.orderType(),
+                actualOrder.message(),
+                actualOrder.producerEndpoint());
         template.send("orders", actualOrder);
     }
 
     void confirm(@Valid final ConfirmationModel confirmation) {
-        log.info("confirm: {}", confirmation);
         final var violations = validator.validate(confirmation);
         if (!violations.isEmpty()) {
             log.debug("confirm: violations={}", violations);
             throw new ConfirmationConstraintViolationsException(violations);
         }
-    }
-
-    private OrderModel getRandomOrder() {
-        final var orderTypes = Arrays.asList("Software", "Hardware");
-        final var messages = Arrays.asList(
-                "I am a test order.",
-                "Testing this simulation.",
-                "Please put me in the queue",
-                "Faster, faster!"
-        );
-        return OrderModel
-                .builder()
-                .id(UUID.randomUUID())
-                .orderType(orderTypes.get(random.nextInt(orderTypes.size())))
-                .message(messages.get(random.nextInt(messages.size())))
-                .producerEndpoint(String.format("http://%s:%s/rest/confirm", LOCALHOST.getHostAddress(), serverPort))
-                .build();
+        log.info("CONFIRMATION RECEIVED: confirmationId={}, orderId={}, orderType={}",
+                confirmation.id(),
+                confirmation.orderId(),
+                confirmation.orderType());
     }
 }
