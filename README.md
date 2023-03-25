@@ -37,8 +37,7 @@ To run this simulation you will need the following software:
 ### How To Run (use Gradle developer mode)
 
 1. Clone the repo: `git clone https://github.com/danielptv/messaging-simulation.git`
-2. Start Kafka by calling `docker compose up zookeeper kafka` in the projects' root directory using the provided <code>
-   *docker-compose.yaml*</code>.
+2. Start Kafka by calling `docker compose up zookeeper kafka` in the projects' root directory using the provided <code>*docker-compose.yaml*</code>.
 3. Start consumers and producers by running `gradle bootRun` repeatedly in their respective root
    directories. **Important:** Make sure to specify ports by passing them as options to avoid conflicts. For consumers,
    also define their type as it will default to *"software"* otherwise.
@@ -133,3 +132,20 @@ consumer/src
 * **CustomErrorHandler.java:** Provides custom error handling for exceptions thrown within the Kafka listener.
 * **application.yml:** Configuration for spring-kafka and other important parameters. Parameterization enables this
   server to be a generic consumer with the consumer type being passed through an environment variable.
+
+## Test Cases
+
+### Scenario: Kafka, producers and consumers are running
+**Setup:**
+* Start Kafka with `docker compose up zookeeper kafka`
+* Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`
+* Send messages (orders)
+
+**Result:**
+* All orders are processed directly by the consumer responsible for the respective order type
+* Order confirmations are sent out immediately
+* Order confirmations are successfully received by the right producers
+
+https://user-images.githubusercontent.com/93288603/227732942-0f58755e-dfe1-4263-9d5d-f8652c9da436.mp4
+
+
