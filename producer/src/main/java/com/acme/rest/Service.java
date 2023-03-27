@@ -2,6 +2,7 @@ package com.acme.rest;
 
 import com.acme.kafka.ConfirmationModel;
 import com.acme.kafka.OrderModel;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import static com.acme.dev.Banner.LOCALHOST;
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
 @Slf4j
+@SuppressFBWarnings("EI_EXPOSE_REP")
 public class Service {
     private final KafkaTemplate<String, OrderModel> template;
     private final Validator validator;
