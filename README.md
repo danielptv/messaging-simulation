@@ -136,82 +136,82 @@ consumer/src
 
 ### Scenario: Kafka, producers and consumers are running
 **Setup:**
-* Start Kafka with `docker compose up zookeeper kafka`
-* Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`
-* Send messages (orders)
+* Start Kafka with `docker compose up zookeeper kafka`.
+* Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`.
+* Send messages (orders).
 
 **Result:**
-* All orders are processed directly by the consumer responsible for the respective order type
-* Order confirmations are sent out immediately
-* Order confirmations are successfully received by the right producers
+* All orders are processed directly by the consumer responsible for the respective order type.
+* Order confirmations are sent out immediately.
+* Order confirmations are successfully received by the right producers.
 
 https://user-images.githubusercontent.com/93288603/228305287-a3322167-3189-4339-b465-8b656eb8f3b1.mp4
 
 ### Scenario: Producer sends message of type that can't be processed
 **Setup:**
-* Start Kafka with `docker compose up zookeeper kafka`
-* Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`
-* Send order of an order type that doesn't match any consumer type. In the example consumers of type 'software' and 'hardware' exist while that message has the order type 'cookies'
+* Start Kafka with `docker compose up zookeeper kafka`.
+* Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`.
+* Send order of an order type that doesn't match any consumer type. In the example consumers of type *'software'* and *'hardware'* exist while the message is of order type *'cookies'*.
 
 **Results:**
-* The message is sent successfully by the producers
-* Nothing happens afterwards as there is no consumer to process this type of message. Therefore, the producer will never receive a confirmation for this message.
+* The message is sent successfully by the producers.
+* Nothing happens afterward as there is no consumer to process this type of message. Therefore, the producer will never receive a confirmation for this message.
 
 https://user-images.githubusercontent.com/93288603/228306898-98e58e22-ea24-49b4-a6e5-0339cf4c4f38.mp4
 
 ### Scenario: Consumer receive messages delayed as they are down at first
-**Setuo:**
-* Start Kafka with `docker compose up zookeeper kafka`
-* Start producers with `docker compose up producer-1 producer-2` (Do not start consumers yet)
-* Send messages
-* Start consumers with `docker compose up consumer-1 consumer-2`
+**Setup:**
+* Start Kafka with `docker compose up zookeeper kafka`.
+* Start producers with `docker compose up producer-1 producer-2` but do not start consumers yet.
+* Send messages.
+* Start consumers with `docker compose up consumer-1 consumer-2`.
 
 **Results:**
-* The messages are sent successfully. However, the messages are not received as the addressed consumers are down. The messages instead reside in the queue inside Kafka
-* Once the consumers are started they receive the messages, process them and send out confirmations
-* The confirmations are received by the producers (There is a delay due to the consumers being down at first of course)
+* The messages are sent successfully. However, the messages are not received as the addressed consumers are down. The messages instead reside in the queue.
+* Once the consumers are started they receive the messages, process them and send out confirmations.
+* The confirmations are received by the producers. There is a delay due to the consumers being down at first, of course.
 
 https://user-images.githubusercontent.com/93288603/228311302-2cde661b-24e5-4382-8d13-ceb1f6937c9a.mp4
 
-### Scenerio: Producer unable to receive confirmation due to unavilability
+### Scenario: Producer is unable to receive confirmation due to unavailability
 **Setup:**
-* Start Kafka with `docker compose up zookeeper kafka`
-* Start a producer of your choice, for example `docker compose up producer-1`
-* Send a message with an order type matching the consumer you want to start later
-* Stop the producer you've started earlier by calling for example `docker compose stop producer-1`
-* Start the consumer you have sent a message to, for example `docker compose up consumer-2`
+* Start Kafka with `docker compose up zookeeper kafka`.
+* Start a producer of your choice, for example `docker compose up producer-1`.
+* Send a message with an order type matching the consumer you want to start later.
+* Stop the producer you've started earlier by calling for example `docker compose stop producer-1`.
+* Start the consumer you have sent a message to, for example `docker compose up consumer-2`.
 
 **Results:**
-* The message is sent out successfully
-* Once the consumer is running it receives the message and tries to send a confirmation
-* The confirmation sending fails as the receiving producer has become unavailable meanwhile (RessourceAccessException). Since this simulation uses REST for sending confirmations the confirmation is lost in this case
+* The message is sent out successfully.
+* Once the consumer is running it receives the message and tries to send a confirmation.
+* The confirmation sending fails as the receiving producer has become unavailable meanwhile (RessourceAccessException). Since this simulation uses REST for sending confirmations the confirmation is lost in this case.
 
 https://user-images.githubusercontent.com/93288603/228314170-aa197b68-23f1-429d-8a35-911b9ecc628a.mp4
 
 ### Scenario: Temporary unavailability of Kafka
 **Setup:**
-* Start Kafka with `docker compose up zookeeper kafka`
-* Start a producer of your choice, for example `docker compose up producer-1`
-* Send a message with an order type matching the consumer you want to start later
-* Stop Kafka with `docker compose stop zookeeper kafka`
-* Start Kafka with `docker compose up zookeeper kafka`
-* Start the consumer you have sent a message to, for example `docker compose up consumer-2`
+* Start Kafka with `docker compose up zookeeper kafka`.
+* Start a producer of your choice, for example `docker compose up producer-1`.
+* Send a message with an order type matching the consumer you want to start later.
+* Stop Kafka with `docker compose stop zookeeper kafka`.
+* Start Kafka with `docker compose up zookeeper kafka`.
+* Start the consumer you have sent a message to, for example with `docker compose up consumer-2`.
 
 **Results:**
-* Although Kafka was stopped temporarily it is configured by default to persist messages currently in the queue on shutdown. Therefore the message is successfully delivered to the recipient and the producer receives the confirmation. The persistance can be turned off if the use case does not require as it can reduce the overall performance of Kafka
+* Although Kafka was stopped temporarily it is configured by default to persist messages currently in the queue on shutdown. Therefore, the message is successfully delivered to the recipient and the producer receives a confirmation. The persistence can be turned off if the use case does not require it as it can reduce the overall performance of Kafka.
 
 https://user-images.githubusercontent.com/93288603/228317718-3c452c07-7829-41dc-b7a8-52c61b44dd3e.mp4
 
 ### Scenario: Kafka is down
 **Setup:**
-* Start a producer of your choice, for example `docker compose up producer-1`
-* Start a consumer of your choice, for example `docker compose up consumer-2`
-* Stop Kafka with `docker compose stop zookeeper kafka` (Docker Compose automatically starts Kafka because consumers and producers depend on its health check)
-* Send a message
+* Start a producer of your choice, for example `docker compose up producer-1`.
+* Start a consumer of your choice, for example `docker compose up consumer-2`.
+* Stop Kafka with `docker compose stop zookeeper kafka` as the provided Docker Compose will automatically start Kafka because consumers and producers depend on its health check.
+* Send a message.
 
 **Result:**
-* The message cannot be sent as Kafka is down. An exception is thrown when the message is sent
-* The consumers network client cannot connect to Kafka and also fails with an exception
-* **Note:** The exception are left unhandeled intentionally for demonstration purposes
+* The message cannot be sent as Kafka is down. An exception is thrown when the message is sent.
+* The consumers network client cannot connect to Kafka and also fails with an exception.
+* **Note:** The exceptions are left unhandled intentionally for demonstration purposes.
 
 https://user-images.githubusercontent.com/93288603/228321345-ff087937-6396-41c0-b77e-d049bba904b8.mp4
