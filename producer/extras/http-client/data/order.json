@@ -1,6 +1,0 @@
-{
-  "id": "00000000-0000-0000-0000-000000000001",
-  "orderType": "software",
-  "message": "Test",
-  "producerEndpoint": "http://localhost:8080/confirm"
-}

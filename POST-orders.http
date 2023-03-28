@@ -37,3 +37,13 @@ Content-Type: application/json
   "orderType": "hardware",
   "message": "Get me some Pentium x)"
 }
+
+### Producer-2: Order something that can't be consumed/processed (Cookies)
+POST {{producer-2}}/order
+Content-Type: application/json
+
+{
+  "id": "{{$uuid}}",
+  "orderType": "cookies",
+  "message": "Send Orios, I'm starving"
+}
