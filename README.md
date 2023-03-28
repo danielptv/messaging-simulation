@@ -145,6 +145,24 @@ consumer/src
 * Order confirmations are sent out immediately
 * Order confirmations are successfully received by the right producers
 
-https://user-images.githubusercontent.com/93288603/227732942-0f58755e-dfe1-4263-9d5d-f8652c9da436.mp4
+https://user-images.githubusercontent.com/93288603/228305287-a3322167-3189-4339-b465-8b656eb8f3b1.mp4
+
+
+### Scenario: Producer sends message of type that can't be processed
+**Setup:**
+* Start Kafka with `docker compose up zookeeper kafka`
+* Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`
+* Send order of an order type that doesn't match any consumer type. In the example consumers of type 'software' and 'hardware' exist while that message has the order type 'cookies'
+
+**Results:**
+* The message is sent successfully by the producers
+* Nothing happens afterwards as there is no consumer to process this type of message. Therefore, the producer will never receive a confirmation for this message.
+
+https://user-images.githubusercontent.com/93288603/228306898-98e58e22-ea24-49b4-a6e5-0339cf4c4f38.mp4
+
+
+
+
+
 
 
