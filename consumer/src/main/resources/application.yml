@@ -20,6 +20,9 @@ spring:
         spring.json.value.default.type: com.danielptv.kafka.OrderModel
         spring.json.trusted.packages: "*"
         group.instance.id: ${CONSUMER_TYPE:software}-consumer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   jackson:
     serialization:
       fail-on-empty-beans: false
