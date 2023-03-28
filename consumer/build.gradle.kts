@@ -1,4 +1,3 @@
-import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -89,23 +88,6 @@ tasks.compileTestJava {
         add("-Xlint:unchecked")
         add("--enable-preview")
     }
-}
-
-tasks.named<BootBuildImage>("bootBuildImage") {
-    val path = "messaging-sim"
-    imageName.set("$path/${project.name}")
-    val tag = System.getProperty("tag") ?: project.version.toString()
-    tags.set(mutableListOf("$path/${project.name}:$tag"))
-
-    @Suppress("StringLiteralDuplication")
-    environment.set(
-        mapOf(
-            "BP_JVM_VERSION" to "19.0.2",
-            "BPL_JVM_THREAD_COUNT" to "20",
-            "BPE_DELIM_JAVA_TOOL_OPTIONS" to " ",
-            "BPE_APPEND_JAVA_TOOL_OPTIONS" to "--enable-preview",
-        )
-    )
 }
 
 tasks.named<BootRun>("bootRun") {
