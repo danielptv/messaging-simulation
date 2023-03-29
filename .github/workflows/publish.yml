@@ -20,9 +20,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker build and Push consumer to GitHub Container Registry
+      - name: Docker Build and Push Consumer to GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
           context: ./consumer
           push: true
           tags: ghcr.io/danielptv/messaging-simulation/consumer:latest
+
+      - name: Docker Build and Push Producer to GitHub Container Registry
+        uses: docker/build-push-action@v3
+        with:
+          context: ./producer
+          push: true
+          tags: ghcr.io/danielptv/messaging-simulation/producer:latest
