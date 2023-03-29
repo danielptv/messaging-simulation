@@ -14,30 +14,64 @@ This project is a simulation for messaging consisting of 3 main parts:
 
 ### Prerequisites
 
-To run this simulation you will need the following software:
+To run this simulation you will need an installation of [Docker](https://docs.docker.com/get-docker/). This is enough if you choose the first "How To Run" option.
 
-* Installation of [Docker](https://docs.docker.com/get-docker/)
+If you would like to compile the code yourself you will also need:
+
 * JDK min. version 19,
   i.e. [Eclipse Temurin](https://adoptium.net/temurin/releases/?version=19)
 * Recent version of [Gradle](https://services.gradle.org/distributions/) to create Docker images and use Gradle CLI
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you don't want to manually download the
   project
 
+### How To Run (using GitHub Container Registry) - Recommended!
+
+1. Login to the GitHub Container Registry (ghcr.io):
+
+````shell
+# using a key file - replace <KEYFILE> and <USERNAME>
+cat <KEYFILE> | docker login ghcr.io -u <USERNAME> --password-stdin
+# providing password directly (not recommended)
+docker login ghcr.io -u <USERNAME> -p <PASSWORD>
+````
+
+2. Pull the images provided in the packages section of this repository:
+
+````shell
+docker pull ghcr.io/danielptv/messaging-simulation/producer:latest
+docker pull ghcr.io/danielptv/messaging-simulation/consumer:latest
+````
+
+3. Start the simulation by running `docker compose up` in the directory where the provided <code>
+   *docker-compose.yaml*</code> resides.
+4. Done!
+
+**Note:** The images are always up-to-date since they get regenerated automatically by GitHub Actions everytime a change gets pushed to a relevant directory.
+
 ### How To Run (build Docker images)
 
 1. Clone the repo: `git clone https://github.com/danielptv/messaging-simulation.git`
-2. Create Docker images of **consumer** and **producer** by running `gradle bootBuildImage` in their respective root
-   directories.
+2. Create Docker images of **consumer** and **producer** by running `docker build -t <tag>` in their respective root
+   directories. For the <code>
+   *docker-compose.yaml*</code> to work as is you should choose the tags as provided by the GitHub Container Registry:
+
+````shell
+# /producer
+docker build -t ghcr.io/danielptv/messaging-simulation/producer:latest
+# /consumer
+docker build -t ghcr.io/danielptv/messaging-simulation/consumer:latest
+````
+
 3. Start the servers by calling `docker compose up` in the projects' root directory using the provided <code>
    *docker-compose.yaml*</code>.
-4. Done!
 
 **Note:** Producer and Kafka ports as well as consumer types can be adjusted in the <code>*.env*</code> file.
 
 ### How To Run (use Gradle developer mode)
 
 1. Clone the repo: `git clone https://github.com/danielptv/messaging-simulation.git`
-2. Start Kafka by calling `docker compose up zookeeper kafka` in the projects' root directory using the provided <code>*docker-compose.yaml*</code>.
+2. Start Kafka by calling `docker compose up zookeeper kafka` in the projects' root directory using the provided <code>
+   *docker-compose.yaml*</code>.
 3. Start consumers and producers by running `gradle bootRun` repeatedly in their respective root
    directories. **Important:** Make sure to specify ports by passing them as options to avoid conflicts. For consumers,
    also define their type as it will default to *"software"* otherwise.
@@ -135,12 +169,15 @@ consumer/src
 ## Test Cases
 
 ### Scenario: Kafka, producers and consumers are running
+
 **Setup:**
+
 * Start Kafka with `docker compose up zookeeper kafka`.
 * Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`.
 * Send messages (orders).
 
 **Result:**
+
 * All orders are processed directly by the consumer responsible for the respective order type.
 * Order confirmations are sent out immediately.
 * Order confirmations are successfully received by the right producers.
@@ -148,33 +185,44 @@ consumer/src
 https://user-images.githubusercontent.com/93288603/228305287-a3322167-3189-4339-b465-8b656eb8f3b1.mp4
 
 ### Scenario: Producer sends message of type that can't be processed
+
 **Setup:**
+
 * Start Kafka with `docker compose up zookeeper kafka`.
 * Start producers and consumers with `docker compose up consumer-1 consumer-2 producer-1 producer-2`.
-* Send order of an order type that doesn't match any consumer type. In the example consumers of type *'software'* and *'hardware'* exist while the message is of order type *'cookies'*.
+* Send order of an order type that doesn't match any consumer type. In the example consumers of type *'software'* and *'
+  hardware'* exist while the message is of order type *'cookies'*.
 
 **Results:**
+
 * The message is sent successfully by the producers.
-* Nothing happens afterward as there is no consumer to process this type of message. Therefore, the producer will never receive a confirmation for this message.
+* Nothing happens afterward as there is no consumer to process this type of message. Therefore, the producer will never
+  receive a confirmation for this message.
 
 https://user-images.githubusercontent.com/93288603/228306898-98e58e22-ea24-49b4-a6e5-0339cf4c4f38.mp4
 
 ### Scenario: Consumer receive messages delayed as they are down at first
+
 **Setup:**
+
 * Start Kafka with `docker compose up zookeeper kafka`.
 * Start producers with `docker compose up producer-1 producer-2` but do not start consumers yet.
 * Send messages.
 * Start consumers with `docker compose up consumer-1 consumer-2`.
 
 **Results:**
-* The messages are sent successfully. However, the messages are not received as the addressed consumers are down. The messages instead reside in the queue.
+
+* The messages are sent successfully. However, the messages are not received as the addressed consumers are down. The
+  messages instead reside in the queue.
 * Once the consumers are started they receive the messages, process them and send out confirmations.
 * The confirmations are received by the producers. There is a delay due to the consumers being down at first, of course.
 
 https://user-images.githubusercontent.com/93288603/228311302-2cde661b-24e5-4382-8d13-ceb1f6937c9a.mp4
 
 ### Scenario: Producer is unable to receive confirmation due to unavailability
+
 **Setup:**
+
 * Start Kafka with `docker compose up zookeeper kafka`.
 * Start a producer of your choice, for example `docker compose up producer-1`.
 * Send a message with an order type matching the consumer you want to start later.
@@ -182,14 +230,18 @@ https://user-images.githubusercontent.com/93288603/228311302-2cde661b-24e5-4382-
 * Start the consumer you have sent a message to, for example `docker compose up consumer-2`.
 
 **Results:**
+
 * The message is sent out successfully.
 * Once the consumer is running it receives the message and tries to send a confirmation.
-* The confirmation sending fails as the receiving producer has become unavailable meanwhile (RessourceAccessException). Since this simulation uses REST for sending confirmations the confirmation is lost in this case.
+* The confirmation sending fails as the receiving producer has become unavailable meanwhile (RessourceAccessException).
+  Since this simulation uses REST for sending confirmations the confirmation is lost in this case.
 
 https://user-images.githubusercontent.com/93288603/228314170-aa197b68-23f1-429d-8a35-911b9ecc628a.mp4
 
 ### Scenario: Temporary unavailability of Kafka
+
 **Setup:**
+
 * Start Kafka with `docker compose up zookeeper kafka`.
 * Start a producer of your choice, for example `docker compose up producer-1`.
 * Send a message with an order type matching the consumer you want to start later.
@@ -198,18 +250,26 @@ https://user-images.githubusercontent.com/93288603/228314170-aa197b68-23f1-429d-
 * Start the consumer you have sent a message to, for example with `docker compose up consumer-2`.
 
 **Results:**
-* Although Kafka was stopped temporarily it is configured by default to persist messages currently in the queue on shutdown. Therefore, the message is successfully delivered to the recipient and the producer receives a confirmation. The persistence can be turned off if the use case does not require it as it can reduce the overall performance of Kafka.
+
+* Although Kafka was stopped temporarily it is configured by default to persist messages currently in the queue on
+  shutdown. Therefore, the message is successfully delivered to the recipient and the producer receives a confirmation.
+  The persistence can be turned off if the use case does not require it as it can reduce the overall performance of
+  Kafka.
 
 https://user-images.githubusercontent.com/93288603/228317718-3c452c07-7829-41dc-b7a8-52c61b44dd3e.mp4
 
 ### Scenario: Kafka is down
+
 **Setup:**
+
 * Start a producer of your choice, for example `docker compose up producer-1`.
 * Start a consumer of your choice, for example `docker compose up consumer-2`.
-* Stop Kafka with `docker compose stop zookeeper kafka` as the provided Docker Compose will automatically start Kafka because consumers and producers depend on its health check.
+* Stop Kafka with `docker compose stop zookeeper kafka` as the provided Docker Compose will automatically start Kafka
+  because consumers and producers depend on its health check.
 * Send a message.
 
 **Result:**
+
 * The message cannot be sent as Kafka is down. An exception is thrown when the message is sent.
 * The consumers network client cannot connect to Kafka and also fails with an exception.
 * **Note:** The exceptions are left unhandled intentionally for demonstration purposes.
