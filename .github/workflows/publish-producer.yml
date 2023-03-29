@@ -1,0 +1,29 @@
+name: Build & Deploy Producer
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'producer/**'
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  build_and_push:
+    name: Build & Push to GitHub Container Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker Build and Push Producer to GitHub Container Registry
+        uses: docker/build-push-action@v3
+        with:
+          context: ./producer
+          push: true
+          tags: ghcr.io/danielptv/messaging-simulation/producer:latest

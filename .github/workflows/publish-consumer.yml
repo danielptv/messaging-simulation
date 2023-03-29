@@ -1,8 +1,10 @@
-name: Build & Deploy
+name: Build & Deploy Consumer
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'consumer/**'
   workflow_dispatch:
 
 permissions: write-all
@@ -19,17 +21,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Docker Build and Push Consumer to GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
           context: ./consumer
           push: true
           tags: ghcr.io/danielptv/messaging-simulation/consumer:latest
-
-      - name: Docker Build and Push Producer to GitHub Container Registry
-        uses: docker/build-push-action@v3
-        with:
-          context: ./producer
-          push: true
-          tags: ghcr.io/danielptv/messaging-simulation/producer:latest
