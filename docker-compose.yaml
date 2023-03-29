@@ -50,7 +50,7 @@ services:
   # P r o d u c e r  1
   # ------------------------------------------------------------------------------------
   producer-1:
-    image: messaging-sim/producer:latest
+    image: ghcr.io/danielptv/messaging-simulation/producer:latest
     ports:
       - ${PRODUCER_PORT_1}:${PRODUCER_PORT_1}
     environment:
@@ -65,7 +65,7 @@ services:
   # P r o d u c e r  2
   # ------------------------------------------------------------------------------------
   producer-2:
-    image: messaging-sim/producer:latest
+    image: ghcr.io/danielptv/messaging-simulation/producer:latest
     ports:
       - ${PRODUCER_PORT_2}:${PRODUCER_PORT_2}
     environment:
@@ -80,7 +80,7 @@ services:
   # C o n s u m e r  1
   # ------------------------------------------------------------------------------------
   consumer-1:
-    image: messaging-sim/consumer:latest
+    image: ghcr.io/danielptv/messaging-simulation/consumer:latest
     environment:
       CONSUMER_TYPE: ${CONSUMER_TYPE_1}
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
@@ -93,7 +93,7 @@ services:
   # C o n s u m e r  2
   # ------------------------------------------------------------------------------------
   consumer-2:
-    image: messaging-sim/consumer:latest
+    image: ghcr.io/danielptv/messaging-simulation/consumer:latest
     environment:
       CONSUMER_TYPE: ${CONSUMER_TYPE_2}
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:${KAFKA_PORT_INTERNAL}
