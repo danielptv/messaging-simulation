@@ -26,26 +26,16 @@ If you would like to compile the code yourself you will also need:
 
 ### How To Run (using GitHub Container Registry) - Recommended!
 
-1. Login to the GitHub Container Registry (ghcr.io) using a [personal access token (classic)](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). The token must have the <code>
-   *read:packages*</code> scope. Replace the placeholders with your GitHub username and your token string or a token file:
-
-````shell
-# using a key file - replace <TOKEN_FILE> and <USERNAME>
-cat <TOKEN_FILE> | docker login ghcr.io -u <USERNAME> --password-stdin
-# providing the token directly (not recommended)
-echo '<TOKEN>' | docker login ghcr.io -u <USERNAME> --password-stdin
-````
-
-2. Pull the images provided in the packages section of this repository:
+1. Pull the images provided in the packages section of this repository:
 
 ````shell
 docker pull ghcr.io/danielptv/messaging-simulation/producer:latest
 docker pull ghcr.io/danielptv/messaging-simulation/consumer:latest
 ````
 
-3. Start the simulation by running `docker compose up` in the directory where the provided <code>
+2. Start the simulation by running `docker compose up` in the directory where the provided <code>
    *docker-compose.yaml*</code> resides.
-4. Done!
+3. Done!
 
 **Note:** The images are always up-to-date since they get regenerated automatically by GitHub Actions everytime a change gets pushed to a relevant directory.
 
